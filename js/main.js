@@ -90,24 +90,17 @@ function init() {
   particles = new THREE.ParticleSystem( particleGeo, particleMat );
   orb.add( particles );
 
-  attributes = {
+  var shader = THREE.DisintegrateShader;
 
-    customColor: {  type: 'c', value: [] }
-
-  };
-
-  uniforms = {
-
-    time:      { type: "f", value: 0.0 }
-
-  };
+  attributes = THREE.UniformsUtils.clone( shader.attributes );
+  uniforms = THREE.UniformsUtils.clone( shader.uniforms );
 
   var shaderMaterial = new THREE.ShaderMaterial( {
 
     uniforms:       uniforms,
     attributes:     attributes,
-    vertexShader:   document.getElementById( 'vertexshader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+    vertexShader:   shader.vertexShader,
+    fragmentShader: shader.fragmentShader,
     blending:       THREE.AdditiveBlending,
     depthTest:      false,
     transparent:    true,
@@ -122,7 +115,6 @@ function init() {
   lines = new THREE.Line( lineGeo, shaderMaterial, THREE.LinePieces );
 
   var vertices = lines.geometry.vertices;
-
   var color = attributes.customColor.value;
 
   for( var v = 0; v < vertices.length; v ++ ) {
@@ -134,7 +126,6 @@ function init() {
   orb.add( lines );
 
   renderer = new THREE.WebGLRenderer();
-  // renderer = new THREE.CanvasRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
   $(container).append( renderer.domElement );
 
