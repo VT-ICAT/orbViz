@@ -52,7 +52,7 @@ function init() {
   } );
 
   var sphere = new THREE.Mesh(
-      new THREE.SphereGeometry( 462, 28, 28 ),
+      new THREE.SphereGeometry( 456, 28, 28 ),
       material
   );
   scene.add( sphere );
