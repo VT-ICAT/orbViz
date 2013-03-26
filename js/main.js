@@ -25,11 +25,11 @@ function init() {
 
   scene = new THREE.Scene();
 
+  // outside circle
   var resolution = 150;
   var amplitude = 600;
   var size = 360 / resolution;
 
-  // outside circle
   var geometry = new THREE.Geometry();
   var material = new THREE.LineBasicMaterial( { color: 0x656565 } );
   for(var i = 0; i <= resolution; i++) {
@@ -37,8 +37,21 @@ function init() {
       geometry.vertices.push( new THREE.Vector3( Math.cos( segment ) * amplitude, Math.sin( segment ) * amplitude, 0 ) );
   }
 
-  var line = new THREE.Line( geometry, material );
-  scene.add(line);
+  var circle = new THREE.Line( geometry, material );
+  scene.add( circle );
+
+  // red sphere
+  var material = new THREE.MeshBasicMaterial( {
+      color: 0x660022,
+      opacity: 0.5,
+      transparent: true,
+  } );
+
+  var sphere = new THREE.Mesh(
+      new THREE.SphereGeometry( 462, 28, 28 ),
+      material
+  );
+  scene.add( sphere );
 
   orb = new THREE.Object3D();
   scene.add( orb );
