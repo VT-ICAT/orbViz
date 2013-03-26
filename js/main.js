@@ -6,7 +6,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var separation = 425;
+var separation = 345;
 var amountX = 50, amountY = 50;
 
 var camera, scene, stats, renderer;
@@ -60,7 +60,7 @@ function init() {
   var particleGeo = new THREE.Geometry();
   var lineGeo = new THREE.Geometry();
 
-  for ( var i = 0; i < 1000; i ++ ) {
+  for ( var i = 0; i < 1500; i ++ ) {
     var particle = new THREE.Vector3();
 
     particle.x = Math.random() * 2 - 1;
