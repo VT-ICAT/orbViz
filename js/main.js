@@ -53,10 +53,11 @@ function init() {
   );
   scene.add( sphere );
 
+  // orb parent container
   orb = new THREE.Object3D();
   scene.add( orb );
 
-  //particles
+  // particles and lines
   var particleGeo = new THREE.Geometry();
   var lineGeo = new THREE.Geometry();
 
