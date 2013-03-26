@@ -13,6 +13,10 @@ var camera, scene, stats, renderer;
 
 var orb, particles, lines, oldLines;
 
+var object, uniforms, attributes;
+
+var start = Date.now();
+
 init();
 animate();
 
@@ -82,12 +86,51 @@ function init() {
     }
   }
 
-  material = new THREE.ParticleBasicMaterial( { size: 3 } );
-  particles = new THREE.ParticleSystem( particleGeo, material );
+  var particleMat = new THREE.ParticleBasicMaterial( { size: 3 } );
+  particles = new THREE.ParticleSystem( particleGeo, particleMat );
   orb.add( particles );
 
-  material = new THREE.LineBasicMaterial( { opacity: 0.25, linewidth: 1, transparent: true } );
-  lines = new THREE.Line( lineGeo, material, THREE.LinePieces );
+  attributes = {
+
+    customColor: {  type: 'c', value: [] }
+
+  };
+
+  uniforms = {
+
+    time:      { type: "f", value: 0.0 }
+
+  };
+
+  var shaderMaterial = new THREE.ShaderMaterial( {
+
+    uniforms:       uniforms,
+    attributes:     attributes,
+    vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+    fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+    blending:       THREE.AdditiveBlending,
+    depthTest:      false,
+    transparent:    true,
+    vertexColors:   THREE.VertexColors
+
+  });
+
+  shaderMaterial.linewidth = 1;
+
+  lineGeo.dynamic = true;
+
+  lines = new THREE.Line( lineGeo, shaderMaterial, THREE.LinePieces );
+
+  var vertices = lines.geometry.vertices;
+
+  var color = attributes.customColor.value;
+
+  for( var v = 0; v < vertices.length; v ++ ) {
+
+    color[ v ] = new THREE.Color( 0xffffff );
+
+  }
+
   orb.add( lines );
 
   renderer = new THREE.WebGLRenderer();
@@ -174,6 +217,8 @@ function animate() {
 }
 
 function render() {
+  uniforms.time.value = .00015 * ( Date.now() - start );
+
   camera.lookAt( scene.position );
 
   orb.rotation.x += .002;
