@@ -19,6 +19,8 @@ var hideRedSphere, showRedSphere;
 
 var start = Date.now();
 
+var studios;
+
 init();
 animate();
 
@@ -136,6 +138,9 @@ function init() {
   stats.domElement.style.top = '0px';
   $(container).append( stats.domElement );
 
+  // load the studios
+  populateStudios();
+
   window.addEventListener( 'resize', onWindowResize, false );
 
   // defineTweens
@@ -246,4 +251,14 @@ function defineTweens() {
   });
 }
 
+function populateStudios() {
+  $.getJSON('data/studio-data.json', function(data){
+    studios = data;
+  });
+}
+
+function populateProjects(studio) {
+  $.each(studios[studio], function(project) {
+    console.log(project);
+  });
 }
