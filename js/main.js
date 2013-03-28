@@ -6,7 +6,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var separation = 345;
+var separation = 325;
 var amountX = 50, amountY = 50;
 
 var camera, scene, stats, renderer;
@@ -25,13 +25,13 @@ function init() {
   $('body').append(container);
 
   camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-  camera.position.z = 800;
+  camera.position.z = 875;
 
   scene = new THREE.Scene();
 
   // outside circle
   var resolution = 150;
-  var amplitude = 600;
+  var amplitude = 575;
   var size = 360 / resolution;
 
   var geometry = new THREE.Geometry();
