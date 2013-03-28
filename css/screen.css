@@ -1,0 +1,12 @@
+body {
+  background: black;
+}
+
+#stats {
+  top: auto !important;
+  bottom: 0;
+}
+
+canvas {
+  margin-top: 20px;
+}
