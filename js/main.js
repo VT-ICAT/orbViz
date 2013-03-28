@@ -11,9 +11,11 @@ var amountX = 50, amountY = 50;
 
 var camera, scene, stats, renderer;
 
-var orb, particles, lines, oldLines;
+var orb, redSphere, particles, lines, oldLines;
 
 var object, uniforms, attributes;
+
+var hideRedSphere, showRedSphere;
 
 var start = Date.now();
 
@@ -51,11 +53,11 @@ function init() {
       transparent: true,
   } );
 
-  var sphere = new THREE.Mesh(
+  redSphere = new THREE.Mesh(
       new THREE.SphereGeometry( 456, 28, 28 ),
       material
   );
-  scene.add( sphere );
+  scene.add( redSphere );
 
   // orb parent container
   orb = new THREE.Object3D();
@@ -136,7 +138,8 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
-  // setInterval(function() { recalcLines() }, 3000);
+  // defineTweens
+  defineTweens();
 }
 
 function onWindowResize() {
@@ -219,4 +222,28 @@ function render() {
   renderer.render( scene, camera );
 
   // lines.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
+}
+
+function defineTweens() {
+  hideRedSphere = new TWEEN.Tween( { x: 1.0, y: 1.0, z:1.0 } )
+  .to( { x: 0.01, y: 0.01, z: 0.01 }, 1000 )
+  .easing( TWEEN.Easing.Linear.None )
+  .onUpdate( function () {
+    redSphere.scale = {x: this.x, y: this.y, z: this.z};
+  })
+  .onComplete( function() {
+    redSphere.visible = false;
+  });
+
+  showRedSphere = new TWEEN.Tween( { x: 0.01, y: 0.01, z: 0.01 } )
+  .to( { x: 1.0, y: 1.0, z:1.0 }, 1000 )
+  .easing( TWEEN.Easing.Linear.None )
+  .onStart( function() {
+    redSphere.visible = true;
+  })
+  .onUpdate( function () {
+    redSphere.scale = {x: this.x, y: this.y, z: this.z};
+  });
+}
+
 }
