@@ -191,9 +191,11 @@ THREE.DisintegrateShader = {
 
       "vec3 newPosition = position;",
 
-      "float b = 10000.0 * pnoise( 0.05 * position + vec3( 1.0 * time ), vec3( 100.0 ) );",
+      "float b = 10.0 * pnoise( 0.05 * position + vec3( 1.0 * time ), vec3( 100.0 ) );",
 
-      "vColor = vec4(customColor, b);",
+      "if ( b > 0.5 ) b = 0.5;",
+
+      "vColor = vec4(customColor, b );",
 
       "gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );",
 

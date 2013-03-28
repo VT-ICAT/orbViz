@@ -6,7 +6,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var separation = 325;
+var separation = 375;
 var amountX = 50, amountY = 50;
 
 var camera, scene, stats, renderer;
