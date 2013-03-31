@@ -257,8 +257,52 @@ function populateStudios() {
   });
 }
 
-function populateProjects(studio) {
+function populateProjects( studio ) {
   $.each(studios[studio], function(project) {
     console.log(project);
   });
+}
+
+function createText( text ) {
+  // LIGHTS
+  var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+  dirLight.position.set( 0, 0, 1 ).normalize();
+  scene.add( dirLight );
+
+  var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+  pointLight.position.set( 0, 100, 90 );
+  scene.add( pointLight );
+
+  var material = new THREE.MeshFaceMaterial( [
+    new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
+    new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
+  ] );
+
+  var textGeo = new THREE.TextGeometry( text, {
+
+    size: 70,
+    height: 20,
+    curveSegments: 4,
+
+    font: "optimer",
+    weight: "normal",
+    style: "normal",
+
+    bevelThickness: 2,
+    bevelSize: 1.5,
+    bevelEnabled: true,
+
+    material: 0,
+    extrudeMaterial: 1
+
+  });
+
+  var textMesh = new THREE.Mesh( textGeo, material );
+
+  orb.add( textMesh );
+
+  textMesh.position.x = particles.geometry.vertices[2].x;
+  textMesh.position.y = particles.geometry.vertices[2].y;
+  textMesh.position.z = particles.geometry.vertices[2].z;
+
 }
