@@ -22,3 +22,20 @@
 }());
 
 // Place any jQuery/helper plugins in here.
+
+// Toggle menu
+(function() {
+    $('.nav .dropdown-toggle').click(function (e) {
+        $('.nav .dropdown-toggle').parent().toggleClass('open');
+        e.stopPropagation();
+    });
+
+    $('.nav .dropdown-menu a').click(function (e) {
+        $(this).toggleClass('selected');
+        e.stopPropagation();
+    });
+
+    $(document).click(function () {
+        $('.nav .dropdown-toggle').parent().removeClass('open');
+    });
+}());
