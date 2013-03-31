@@ -220,9 +220,9 @@ function render() {
 
   camera.lookAt( scene.position );
 
-  orb.rotation.x += .002;
-  orb.rotation.y += .002;
-  orb.rotation.z -= .002;
+  orb.rotation.x += .001;
+  orb.rotation.y += .001;
+  orb.rotation.z -= .001;
 
   renderer.render( scene, camera );
 
