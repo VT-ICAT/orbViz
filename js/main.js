@@ -50,8 +50,9 @@ function init() {
   );
   scene.add( redSphere );
 
-  // orb parent container
+  // parent containers
   orb = new THREE.Object3D();
+  texts = new THREE.Object3D();
   scene.add( orb );
 
   // particles and lines
@@ -146,56 +147,6 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-function recalcLines() {
-  var sign;
-
-  if ( Math.random() > .5 )
-    sign = true;
-  else
-    sign = false;
-
-  if (sign) {
-    separation += Math.random()*50;
-  } else {
-    separation -= Math.random()*50;
-  }
-
-  var lineGeo = new THREE.Geometry();
-
-  console.log('recalculated');
-
-  for ( var i = 0; i < particles.geometry.vertices.length; i ++ ) {
-    for (var j = i + 1; j < particles.geometry.vertices.length; j++) {
-      d = particles.geometry.vertices[i].distanceTo(particles.geometry.vertices[j]);
-
-      if (d < separation / 5) {
-        lineGeo.vertices.push( particles.geometry.vertices[i] );
-        lineGeo.vertices.push( particles.geometry.vertices[j] );
-      }
-    }
-  }
-
-  material = new THREE.LineBasicMaterial( { opacity: 0.25, linewidth: 1, transparent: true } );
-
-  // oldLines = new THREE.Line( lines.geometry, material, THREE.LinePieces );
-
-  orb.remove( lines );
-  // orb.add( oldLines );
-
-  // var tween = new TWEEN.Tween( { opacity: 0.25 } )
-  //   .to( { opacity: 0 }, 5000 )
-  //   .easing( TWEEN.Easing.Linear.None )
-  //   .onUpdate( function () {
-
-  //     oldLines.material.opacity = this.opacity;
-
-  //   } )
-  //   .start();
-
-  lines = new THREE.Line( lineGeo, material, THREE.LinePieces );
-  orb.add( lines );
-}
-
 function animate() {
   requestAnimationFrame( animate );
 
@@ -213,9 +164,16 @@ function render() {
   orb.rotation.y += .001;
   orb.rotation.z -= .001;
 
-  renderer.render( scene, camera );
+  if (texts.children.length > 0) {
+    particles.updateMatrixWorld();
 
-  // lines.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
+    $.each(texts.children, function(index) {
+      var vector = particles.geometry.vertices[index].clone();
+      texts.children[index].position = vector.applyMatrix4( particles.matrixWorld );
+    });
+  }
+
+  renderer.render( scene, camera );
 }
 
 function defineTweens() {
@@ -253,45 +211,23 @@ function populateProjects( studio ) {
 }
 
 function createText( text ) {
-  // LIGHTS
-  var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
-  dirLight.position.set( 0, 0, 1 ).normalize();
-  scene.add( dirLight );
+  var textArray = ['Lorem', 'ipsum', 'dolor', 'sit', 'amet,', 'consectetur', 'adipiscing', 'elit', 'Mauris', 'et', 'nunc', 'urna,', 'eget', 'aliquet', 'neque', 'Pellentesque', 'habitant', 'morbi', 'tristique', 'senectus', 'et', 'netus', 'et', 'malesuada', 'fames', 'ac', 'turpis', 'egestas', 'Praesent', 'et', 'arcu', 'tincidunt', 'metus', 'feugiat', 'pretium', 'et', 'at', 'purus', 'In', 'venenatis', 'lobortis', 'volutpat', 'Etiam', 'non', 'tortor', 'dolor,', 'eget', 'eleifend', 'lorem', 'Nulla', 'vitae', 'lectus', 'metus,', 'quis', 'aliquam', 'enim', 'Morbi', 'vel', 'lacus', 'quis', 'libero', 'blandit', 'pulvinar', 'Nunc', 'luctus', 'felis', 'non', 'ligula', 'tempor', 'rutrum', 'Nulla', 'facilisi', 'Donec', 'in', 'dui', 'eu', 'tortor', 'mattis', 'viverra', 'in', 'vitae', 'dolor', 'Mauris', 'quis', 'lorem', 'magna', 'Nullam', 'tempus', 'dapibus', 'eros', 'nec', 'mollis', 'Suspendisse', 'eu', 'tempus', 'orci', 'Duis', 'quis', 'lobortis', 'velit'];
 
-  var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-  pointLight.position.set( 0, 100, 90 );
-  scene.add( pointLight );
+  $.each(textArray, function(index) {
+    var fontShapes = THREE.FontUtils.generateShapes( textArray[index], {
+      font: "optimer",
+      weight: "normal",
+      size: 20
+    } );
 
-  var material = new THREE.MeshFaceMaterial( [
-    new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
-    new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
-  ] );
+    var textGeo = new THREE.ShapeGeometry( fontShapes );
+    var textMat = new THREE.MeshBasicMaterial();
+    var textMesh = new THREE.Mesh( textGeo, textMesh );
 
-  var textGeo = new THREE.TextGeometry( text, {
-
-    size: 70,
-    height: 20,
-    curveSegments: 4,
-
-    font: "optimer",
-    weight: "normal",
-    style: "normal",
-
-    bevelThickness: 2,
-    bevelSize: 1.5,
-    bevelEnabled: true,
-
-    material: 0,
-    extrudeMaterial: 1
-
+    // Offsets origin to the center of the text
+    textMesh.geometry.applyMatrix( new THREE.Matrix4().translate( new THREE.Vector3( -textMesh.geometry.boundingSphere.radius/2, 0, 0 ) ) );
+    texts.add( textMesh );
   });
 
-  var textMesh = new THREE.Mesh( textGeo, material );
-
-  orb.add( textMesh );
-
-  textMesh.position.x = particles.geometry.vertices[2].x;
-  textMesh.position.y = particles.geometry.vertices[2].y;
-  textMesh.position.z = particles.geometry.vertices[2].z;
-
+  scene.add( texts );
 }
