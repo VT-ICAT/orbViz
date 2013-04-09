@@ -39,3 +39,11 @@
         $('.nav .dropdown-toggle').parent().removeClass('open');
     });
 }());
+
+// Toggle modal
+(function() {
+    $('.brand').click(function () {
+        $('#lightbox').modal('show');
+    });
+
+}());
