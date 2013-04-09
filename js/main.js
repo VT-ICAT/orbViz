@@ -1,19 +1,6 @@
-var SCREEN_WIDTH = window.innerWidth;
-var SCREEN_HEIGHT = window.innerHeight;
-
-var mouseX = 0, mouseY = 0;
-
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
-
-var separation = 375;
-var amountX = 50, amountY = 50;
-
 var camera, scene, stats, renderer;
 
-var orb, redSphere, particles, lines, oldLines;
-
-var object, uniforms, attributes;
+var orb, redSphere, particles, lines, texts;
 
 var hideRedSphere, showRedSphere;
 
@@ -25,10 +12,12 @@ init();
 animate();
 
 function init() {
+  var separation = 375;
+
   var container = document.createElement('div');
   $('body').append(container);
 
-  camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
   camera.position.z = 875;
 
   scene = new THREE.Scene();
@@ -148,8 +137,8 @@ function init() {
 }
 
 function onWindowResize() {
-  windowHalfX = window.innerWidth / 2;
-  windowHalfY = window.innerHeight / 2;
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
 
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -231,23 +220,23 @@ function render() {
 
 function defineTweens() {
   hideRedSphere = new TWEEN.Tween( { x: 1.0, y: 1.0, z:1.0 } )
-  .to( { x: 0.01, y: 0.01, z: 0.01 }, 1000 )
-  .easing( TWEEN.Easing.Linear.None )
-  .onUpdate( function () {
-    redSphere.scale = {x: this.x, y: this.y, z: this.z};
+    .to( { x: 0.01, y: 0.01, z: 0.01 }, 1000 )
+    .easing( TWEEN.Easing.Linear.None )
+    .onUpdate( function () {
+      redSphere.scale = {x: this.x, y: this.y, z: this.z};
   })
-  .onComplete( function() {
-    redSphere.visible = false;
+    .onComplete( function() {
+      redSphere.visible = false;
   });
 
   showRedSphere = new TWEEN.Tween( { x: 0.01, y: 0.01, z: 0.01 } )
-  .to( { x: 1.0, y: 1.0, z:1.0 }, 1000 )
-  .easing( TWEEN.Easing.Linear.None )
-  .onStart( function() {
-    redSphere.visible = true;
+    .to( { x: 1.0, y: 1.0, z:1.0 }, 1000 )
+    .easing( TWEEN.Easing.Linear.None )
+    .onStart( function() {
+      redSphere.visible = true;
   })
-  .onUpdate( function () {
-    redSphere.scale = {x: this.x, y: this.y, z: this.z};
+    .onUpdate( function () {
+      redSphere.scale = {x: this.x, y: this.y, z: this.z};
   });
 }
 
